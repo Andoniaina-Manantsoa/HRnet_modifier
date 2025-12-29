@@ -1,13 +1,11 @@
 import { useState } from 'react'
-import './styles/App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
       <div>
-        <h1>My React App</h1>
+        <h1>HRnet</h1>
       </div>
     </>
   )
