@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateEmployeeForm from '../components/CreatEmplyeeForm.jsx';
+import CreateEmployeeForm from '../components/CreatEmployeeForm.jsx';
 
 export default function CreateEmployee() {
     return (

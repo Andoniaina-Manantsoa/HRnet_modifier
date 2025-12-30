@@ -1,8 +1,8 @@
 // src/components/CreateEmployeeForm.jsx
 import React, { useState } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
-import DatePickerInput from "../components/DatePickerInput";
-import SelectInput from "../components/SelectInput";
+import DatePickerInput from "./DatePickerInput";
+import SelectInput from "./SelectInput";
 import { states } from "../data/states";
 
 const departments = [
@@ -12,6 +12,11 @@ const departments = [
     { value: "Human Resources", label: "Human Resources" },
     { value: "Legal", label: "Legal" },
 ];
+
+const stateOptions = states.map((state) => ({
+    value: state.name,
+    label: state.name,
+}));
 
 export default function CreateEmployeeForm() {
     const [employees, setEmployees] = useLocalStorage('employees', []);
@@ -60,76 +65,63 @@ export default function CreateEmployeeForm() {
     return (
         <>
             <form onSubmit={handleSubmit} className="employee-form">
-                <label>
-                    <p>First Name</p>
-                    <input name="firstName" value={formData.firstName} onChange={handleChange} required />
-                </label>
+                <label htmlFor="firstName">First Name</label>
+                <input id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} required/>
 
-                <label>
-                    <p>Last Name</p>
-                    <input name="lastName" value={formData.lastName} onChange={handleChange} required />
-                </label>
+                <label htmlFor="lastName">Last Name</label>
+                <input id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required />
 
-                <label>
+                <label htmlFor="dateOfBirth">Date of Birth</label>
                     <DatePickerInput
-                        label="Date of Birth"
                         id="dateOfBirth"
                         selectedDate={formData.dateOfBirth}
                         onChange={(date) => handleDateChange("dateOfBirth", date)}
                     />
-                </label>
 
-                <label>
+                <label htmlFor="startDate">Start Date</label>
                     <DatePickerInput
-                        label="Start Date"
                         id="startDate"
                         selectedDate={formData.startDate}
                         onChange={(date) => handleDateChange("startDate", date)}
                     />
-                </label>
 
                 <fieldset className='adress'>
                     <legend>Address</legend>
 
-                    <label>
-                        <p>Street</p>
+                    <label htmlFor="street">Street</label>
                         <input name="street" value={formData.street} onChange={handleChange} />
-                    </label>
+                    
 
-                    <label>
-                        <p>City</p>
+                    <label htmlFor="city">City</label>
                         <input name="city" value={formData.city} onChange={handleChange} />
-                    </label>
 
-                    <label>
+                    <label htmlFor="zipCode">Zip Code</label>
+                    <input name="zipCode" value={formData.zipCode} onChange={handleChange} />
+
+                    <label htmlFor="state">State</label>
                         <SelectInput
-                            label="State"
                             id="state"
                             name="state"
                             value={formData.state}
                             onChange={handleChange}
-                            options={states}
+                            options={stateOptions}
                         />
-                    </label>
 
-                    <label>
-                        <p>Zip Code</p>
+                    <label htmlFor="zipCode">Zip Code</label>
                         <input name="zipCode" value={formData.zipCode} onChange={handleChange} />
-                    </label>
+                    
                 </fieldset>
 
-                <label>
+                <label htmlFor="department">Department</label>
                     <SelectInput
-                        label="Department"
                         id="department"
                         name="department"
                         value={formData.department}
                         onChange={handleChange}
                         options={departments}
                     />
-                </label>
 
-                <button type="submit">Save</button>
+                <button type="submit" className='button_save'>Save</button>
             </form>
 
             {showModal && (
