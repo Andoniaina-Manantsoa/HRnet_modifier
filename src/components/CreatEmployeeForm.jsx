@@ -1,5 +1,6 @@
 // src/components/CreateEmployeeForm.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
+import Modal from "@andoniaina/react-modal";
 import useLocalStorage from '../hooks/useLocalStorage';
 import DatePickerInput from "./DatePickerInput";
 import SelectInput from "./SelectInput";
@@ -21,6 +22,7 @@ const stateOptions = states.map((state) => ({
 export default function CreateEmployeeForm() {
     const [employees, setEmployees] = useLocalStorage('employees', []);
     const [showModal, setShowModal] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -124,12 +126,10 @@ export default function CreateEmployeeForm() {
                 <button type="submit" className='button_save'>Save</button>
             </form>
 
-            {showModal && (
-                <div className="modal">
-                    <p>Employee Created!</p>
-                    <button onClick={() => setShowModal(false)}>Close</button>
-                </div>
-            )}
+            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                <h2>Employé créé</h2>
+                <p>L’employé a été ajouté avec succès.</p>
+            </Modal>
         </>
     );
 }
