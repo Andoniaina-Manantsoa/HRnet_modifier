@@ -21,8 +21,9 @@ const stateOptions = states.map((state) => ({
 
 export default function CreateEmployeeForm() {
     const [employees, setEmployees] = useLocalStorage('employees', []);
-    const [showModal, setShowModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [modalType, setModalType] = useState("success"); // "success" ou "error"
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -54,14 +55,49 @@ export default function CreateEmployeeForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const employee = {
-            ...formData,
-            dateOfBirth: formData.dateOfBirth?.toISOString(),
-            startDate: formData.startDate?.toISOString(),
-        };
+        // Validation simple : vérifier que tous les champs obligatoires sont remplis
+        const requiredFields = [
+            "firstName",
+            "lastName",
+            "dateOfBirth",
+            "startDate",
+            "street",
+            "city",
+            "zipCode",
+        ];
 
-        setEmployees([...employees, employee]);
-        setShowModal(true);
+        const isFormValid = requiredFields.every(
+            (field) => formData[field] && formData[field] !== ""
+        );
+
+        if (!isFormValid) {
+            setModalMessage("❌ Veuillez remplir tous les champs obligatoires.");
+            setModalType("error");
+        } else {
+            const employee = {
+                ...formData,
+                dateOfBirth: formData.dateOfBirth.toISOString(),
+                startDate: formData.startDate.toISOString(),
+            };
+            setEmployees([...employees, employee]);
+            setModalMessage("✅ L’employé a été ajouté avec succès !");
+            setModalType("success");
+
+            // Réinitialiser le formulaire si besoin
+            setFormData({
+                firstName: "",
+                lastName: "",
+                dateOfBirth: null,
+                startDate: null,
+                street: "",
+                city: "",
+                state: "Alabama",
+                zipCode: "",
+                department: "Sales",
+            });
+        }
+
+        setIsOpen(true); // ouvrir le modal
     };
 
     return (
@@ -126,9 +162,12 @@ export default function CreateEmployeeForm() {
                 <button type="submit" className='button_save'>Save</button>
             </form>
 
+            {/* Modal */}
             <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-                <h2>Employé créé</h2>
-                <p>L’employé a été ajouté avec succès.</p>
+                <div className={modalType === "error" ? "modal-error" : "modal-success"}>
+                    <h2>{modalType === "error" ? "Erreur" : "Succès"}</h2>
+                    <p>{modalMessage}</p>
+                </div>
             </Modal>
         </>
     );
