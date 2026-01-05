@@ -25,6 +25,12 @@ body {
   font-family: 'Arial', Courier, monospace;
 }
 
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
 .button_save {
   width: 150px;
   border-radius: 8px;
