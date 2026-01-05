@@ -71,7 +71,7 @@ export default function CreateEmployeeForm() {
         );
 
         if (!isFormValid) {
-            setModalMessage("❌ Veuillez remplir tous les champs obligatoires.");
+            setModalMessage("Veuillez remplir tous les champs obligatoires.");
             setModalType("error");
         } else {
             const employee = {
@@ -80,7 +80,7 @@ export default function CreateEmployeeForm() {
                 startDate: formData.startDate.toISOString(),
             };
             setEmployees([...employees, employee]);
-            setModalMessage("✅ L’employé a été ajouté avec succès !");
+            setModalMessage("L’employé a été ajouté avec succès !");
             setModalType("success");
 
             // Réinitialiser le formulaire si besoin
@@ -163,11 +163,18 @@ export default function CreateEmployeeForm() {
             </form>
 
             {/* Modal */}
-            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-                <div className={modalType === "error" ? "modal-error" : "modal-success"}>
-                    <h2>{modalType === "error" ? "Erreur" : "Succès"}</h2>
-                    <p>{modalMessage}</p>
-                </div>
+            <Modal
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+                variant={modalType} 
+            >
+                <h2 className="text-xl font-semibold mb-2">
+                    {modalType === "error" ? "Erreur" : "Succès"}
+                </h2>
+
+                <p className="text-gray-700">
+                    {modalMessage}
+                </p>
             </Modal>
         </>
     );
