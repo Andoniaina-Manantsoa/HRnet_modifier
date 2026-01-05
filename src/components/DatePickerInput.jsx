@@ -11,7 +11,7 @@ function DatePickerInput({ label, selectedDate, onChange, id }) {
                 selected={selectedDate}
                 onChange={onChange}
                 dateFormat="dd/MM/yyyy"
-                className="input"
+                className="form-input"
             />
         </div>
     );

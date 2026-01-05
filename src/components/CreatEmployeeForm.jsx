@@ -1,11 +1,15 @@
 // src/components/CreateEmployeeForm.jsx
-import { useState } from 'react';
+import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { employeeSchema } from "../schemas/employeeSchema";
 import Modal from "@andoniaina/react-modal";
-import useLocalStorage from '../hooks/useLocalStorage';
+import useLocalStorage from "../hooks/useLocalStorage";
 import DatePickerInput from "./DatePickerInput";
 import SelectInput from "./SelectInput";
 import { states } from "../data/states";
 
+// Options de départements
 const departments = [
     { value: "Sales", label: "Sales" },
     { value: "Marketing", label: "Marketing" },
@@ -14,167 +18,152 @@ const departments = [
     { value: "Legal", label: "Legal" },
 ];
 
+// Options d'états
 const stateOptions = states.map((state) => ({
     value: state.name,
     label: state.name,
 }));
 
 export default function CreateEmployeeForm() {
-    const [employees, setEmployees] = useLocalStorage('employees', []);
+    const [employees, setEmployees] = useLocalStorage("employees", []);
     const [isOpen, setIsOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
-    const [modalType, setModalType] = useState("success"); // "success" ou "error"
+    const [modalType, setModalType] = useState("success");
 
-    const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
-        dateOfBirth: null,
-        startDate: null,
-        street: "",
-        city: "",
-        state: "Alabama",
-        zipCode: "",
-        department: "Sales",
+    const {
+        register,
+        handleSubmit,
+        control,
+        reset,
+        formState: { errors },
+    } = useForm({
+        resolver: zodResolver(employeeSchema),
+        defaultValues: {
+            firstName: "",
+            lastName: "",
+            dateOfBirth: null,
+            startDate: null,
+            street: "",
+            city: "",
+            state: "Alabama",
+            zipCode: "",
+            department: "Sales",
+        },
     });
 
-    const handleDateChange = (name, date) => {
-        setFormData((prev) => ({
-            ...prev,
-            [name]: date,
-        }));
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        // Validation simple : vérifier que tous les champs obligatoires sont remplis
-        const requiredFields = [
-            "firstName",
-            "lastName",
-            "dateOfBirth",
-            "startDate",
-            "street",
-            "city",
-            "zipCode",
-        ];
-
-        const isFormValid = requiredFields.every(
-            (field) => formData[field] && formData[field] !== ""
-        );
-
-        if (!isFormValid) {
-            setModalMessage("Veuillez remplir tous les champs obligatoires.");
-            setModalType("error");
-        } else {
+    const onSubmit = (data) => {
+        try {
             const employee = {
-                ...formData,
-                dateOfBirth: formData.dateOfBirth.toISOString(),
-                startDate: formData.startDate.toISOString(),
+                ...data,
+                dateOfBirth: data.dateOfBirth.toISOString(),
+                startDate: data.startDate.toISOString(),
             };
             setEmployees([...employees, employee]);
             setModalMessage("L’employé a été ajouté avec succès !");
             setModalType("success");
-
-            // Réinitialiser le formulaire si besoin
-            setFormData({
-                firstName: "",
-                lastName: "",
-                dateOfBirth: null,
-                startDate: null,
-                street: "",
-                city: "",
-                state: "Alabama",
-                zipCode: "",
-                department: "Sales",
-            });
+            reset();
+        } catch (err) {
+            setModalMessage("Une erreur est survenue.");
+            setModalType("error");
         }
-
-        setIsOpen(true); // ouvrir le modal
+        setIsOpen(true);
     };
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="employee-form">
-                <label htmlFor="firstName">First Name</label>
-                <input id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} required/>
+            <form onSubmit={handleSubmit(onSubmit)} className="employee-form">
+                <div className="form-row">
+                    <div className="form-group">
+                        <label htmlFor="firstName">First Name</label>
+                        <input id="firstName" {...register("firstName")} className="form-input" />
+                        {errors.firstName && <p className="error">{errors.firstName.message}</p>}
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="lastName">Last Name</label>
+                        <input id="lastName" {...register("lastName")} className="form-input" />
+                        {errors.lastName && <p className="error">{errors.lastName.message}</p>}
+                    </div>
+                </div>
 
-                <label htmlFor="lastName">Last Name</label>
-                <input id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required />
+                <div className="form-row">
+                    <div className="form-group">
+                        <label htmlFor="dateOfBirth">Date of Birth</label>
+                        <Controller
+                            control={control}
+                            name="dateOfBirth"
+                            render={({ field }) => (
+                                <DatePickerInput id="dateOfBirth" selectedDate={field.value} onChange={field.onChange} />
+                            )}
+                        />
+                        {errors.dateOfBirth && <p className="error">{errors.dateOfBirth.message}</p>}
+                    </div>
 
-                <label htmlFor="dateOfBirth">Date of Birth</label>
-                    <DatePickerInput
-                        id="dateOfBirth"
-                        selectedDate={formData.dateOfBirth}
-                        onChange={(date) => handleDateChange("dateOfBirth", date)}
-                    />
+                    <div className="form-group">
+                        <label htmlFor="startDate">Start Date</label>
+                        <Controller
+                            control={control}
+                            name="startDate"
+                            render={({ field }) => (
+                                <DatePickerInput id="startDate" selectedDate={field.value} onChange={field.onChange}/>
+                            )}
+                        />
+                        {errors.startDate && <p className="error">{errors.startDate.message}</p>}
+                    </div>
+                </div>
 
-                <label htmlFor="startDate">Start Date</label>
-                    <DatePickerInput
-                        id="startDate"
-                        selectedDate={formData.startDate}
-                        onChange={(date) => handleDateChange("startDate", date)}
-                    />
-
-                <fieldset className='adress'>
+                <fieldset className="adress">
                     <legend>Address</legend>
 
-                    <label htmlFor="street">Street</label>
-                        <input name="street" value={formData.street} onChange={handleChange} />
-                    
+                    <div className="form-group">
+                        <label htmlFor="street">Street</label>
+                        <input {...register("street")} className="form-input" />
+                        {errors.street && <p className="error">{errors.street.message}</p>}
+                    </div>
 
-                    <label htmlFor="city">City</label>
-                        <input name="city" value={formData.city} onChange={handleChange} />
+                    <div className="form-group">
+                        <label htmlFor="city">City</label>
+                        <input {...register("city")} className="form-input" />
+                        {errors.city && <p className="error">{errors.city.message}</p>}
+                    </div>
 
-                    <label htmlFor="zipCode">Zip Code</label>
-                    <input name="zipCode" value={formData.zipCode} onChange={handleChange} />
-
-                    <label htmlFor="state">State</label>
-                        <SelectInput
+                    <div className="form-group">
+                        <label htmlFor="state">State</label>
+                        <Controller
                             id="state"
+                            control={control}
                             name="state"
-                            value={formData.state}
-                            onChange={handleChange}
-                            options={stateOptions}
+                            render={({ field }) => <SelectInput {...field} options={stateOptions} />}
                         />
+                        {errors.state && <p className="error">{errors.state.message}</p>}
+                    </div>
 
-                    <label htmlFor="zipCode">Zip Code</label>
-                        <input name="zipCode" value={formData.zipCode} onChange={handleChange} />
-                    
+                    <div className="form-group">
+                        <label htmlFor="zipCode">Zip Code</label>
+                        <input {...register("zipCode")} className="form-input" />
+                        {errors.zipCode && <p className="error">{errors.zipCode.message}</p>}
+                    </div>
                 </fieldset>
 
-                <label htmlFor="department">Department</label>
-                    <SelectInput
+                <div className="form-group">
+                    <label htmlFor="department">Department</label>
+                    <Controller
                         id="department"
+                        control={control}
                         name="department"
-                        value={formData.department}
-                        onChange={handleChange}
-                        options={departments}
+                        render={({ field }) => <SelectInput {...field} options={departments}/>}
                     />
+                    {errors.department && <p className="error">{errors.department.message}</p>}
+                </div>
 
-                <button type="submit" className='button_save'>Save</button>
+                <button type="submit" className="button_save">
+                    Save
+                </button>
             </form>
 
             {/* Modal */}
-            <Modal
-                isOpen={isOpen}
-                onClose={() => setIsOpen(false)}
-                variant={modalType} 
-            >
-                <h2 className="text-xl font-semibold mb-2">
-                    {modalType === "error" ? "Erreur" : "Succès"}
-                </h2>
-
-                <p className="text-gray-700">
-                    {modalMessage}
-                </p>
+            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} variant={modalType}>
+                <h2>{modalType === "error" ? "Erreur" : "Succès"}</h2>
+                <p>{modalMessage}</p>
             </Modal>
         </>
     );
