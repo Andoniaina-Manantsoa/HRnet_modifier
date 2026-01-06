@@ -55,8 +55,8 @@ export default function CreateEmployeeForm() {
         try {
             const employee = {
                 ...data,
-                dateOfBirth: data.dateOfBirth.toISOString(),
-                startDate: data.startDate.toISOString(),
+                dateOfBirth: data.dateOfBirth?.toISOString(),
+                startDate: data.startDate?.toISOString(),
             };
             setEmployees([...employees, employee]);
             setModalMessage("L’employé a été ajouté avec succès !");
