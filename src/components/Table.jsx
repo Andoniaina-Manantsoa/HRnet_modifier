@@ -72,7 +72,7 @@ export default function EmployeeTable({ employees }) {
             <table className="employee-table">
                 <thead>
                     <tr>
-                        {["firstName", "lastName", "startDate", "department", "dateOfBirth", "street", "city", "state", "zipCode"].map((key) => (
+                        {["First Name", "Last Name", "Start Date", "Department", "Date of Birth", "Street", "City", "State", "Zip Code"].map((key) => (
                             <th
                                 key={key}
                                 onClick={() => requestSort(key)}

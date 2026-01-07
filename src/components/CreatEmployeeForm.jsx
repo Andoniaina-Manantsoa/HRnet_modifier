@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { employeeSchema } from "../schemas/employeeSchema";
-import Modal from "@andoniaina/react-modal";
+import { Modal } from "@andoniaina/react-modal";
+import "@andoniaina/react-modal/Modal.css";
 import useLocalStorage from "../hooks/useLocalStorage";
 import DatePickerInput from "./DatePickerInput";
 import SelectInput from "./SelectInput";
@@ -161,7 +162,7 @@ export default function CreateEmployeeForm() {
             </form>
 
             {/* Modal */}
-            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} variant={modalType}>
+            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} type={modalType} message={modalMessage}>
                 <h2>{modalType === "error" ? "Erreur" : "Succès"}</h2>
                 <p>{modalMessage}</p>
             </Modal>
