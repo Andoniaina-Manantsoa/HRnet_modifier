@@ -1,4 +1,3 @@
-// context/ThemeContext.jsx
 import { createContext, useContext } from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 
@@ -8,14 +7,24 @@ export function ThemeProvider({ children }) {
     const [theme, setTheme] = useLocalStorage("theme", "light");
 
     const toggleTheme = () => {
-        setTheme(prev => (prev === "light" ? "dark" : "light"));
+        setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
     };
 
     return (
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
-            {children}
+            <div className={`theme-${theme}`}>
+                {children}
+            </div>
         </ThemeContext.Provider>
     );
 }
 
-export const useTheme = () => useContext(ThemeContext);
+export function useTheme() {
+    const context = useContext(ThemeContext);
+
+    if (!context) {
+        throw new Error("useTheme must be used within a ThemeProvider");
+    }
+
+    return context;
+}

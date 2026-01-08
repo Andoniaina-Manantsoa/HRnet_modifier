@@ -16,9 +16,11 @@ export default function EmployeeList() {
             <EmployeeTable employees={employees} />
 
             {/* Lien vers la page de création d'employé */}
-            <Link to="/" className="create-link">
-                + Add New Employee
-            </Link>
+            <div className="create-employee-link">
+                <Link to="/" className="create-link">
+                    + Add New Employee
+                </Link>
+            </div>
         </div>
     );
 }

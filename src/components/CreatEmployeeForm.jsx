@@ -156,9 +156,11 @@ export default function CreateEmployeeForm() {
                     {errors.department && <p className="error">{errors.department.message}</p>}
                 </div>
 
-                <button type="submit" className="button_save">
-                    Save
-                </button>
+                <div className="save-button-container">
+                    <button type="submit" className="button_save">
+                        Save
+                    </button>
+                </div>
             </form>
 
             {/* Modal */}
