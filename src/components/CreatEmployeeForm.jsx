@@ -25,12 +25,14 @@ const stateOptions = states.map((state) => ({
     label: state.name,
 }));
 
+// formulaire de création d'employé
 export default function CreateEmployeeForm() {
     const [employees, setEmployees] = useLocalStorage("employees", []);
     const [isOpen, setIsOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [modalType, setModalType] = useState("success");
 
+    // validation du formulaire avec react-hook-form et zod
     const {
         register,
         handleSubmit,
@@ -52,6 +54,7 @@ export default function CreateEmployeeForm() {
         },
     });
 
+    // validation et soumission du formulaire
     const onSubmit = (data) => {
         try {
             const employee = {

@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 
+// fonction useLocalStorage pour gérer le stockage local
 export default function useLocalStorage(key, initialValue) {
+
+    // valeur initiale depuis le localStorage ou la valeur par défaut
     const [value, setValue] = useState(() => {
         try {
             const stored = localStorage.getItem(key);
@@ -11,6 +14,7 @@ export default function useLocalStorage(key, initialValue) {
         }
     });
 
+    // update du localStorage quand la valeur change
     useEffect(() => {
         try {
             localStorage.setItem(key, JSON.stringify(value));

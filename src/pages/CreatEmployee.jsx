@@ -1,6 +1,7 @@
 import React from 'react';
 import CreateEmployeeForm from '../components/CreatEmployeeForm.jsx';
 
+// fonction CreateEmployee pour afficher la page de création d'employé
 export default function CreateEmployee() {
     return (
         <div>

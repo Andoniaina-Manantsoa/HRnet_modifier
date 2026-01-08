@@ -1,8 +1,10 @@
 import { createContext, useContext } from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 
+// fonction ThemeContext pour gérer le thème clair/sombre
 const ThemeContext = createContext();
 
+// fonction ThemeProvider pour fournir le contexte du thème
 export function ThemeProvider({ children }) {
     const [theme, setTheme] = useLocalStorage("theme", "light");
 
@@ -19,6 +21,7 @@ export function ThemeProvider({ children }) {
     );
 }
 
+// fonction useTheme pour consommer le contexte du thème
 export function useTheme() {
     const context = useContext(ThemeContext);
 

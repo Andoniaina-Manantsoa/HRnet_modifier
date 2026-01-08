@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 
+// fonction EmployeeTable pour afficher les employés dans un tableau avec recherche, tri et pagination
 export default function EmployeeTable({ employees }) {
     const [search, setSearch] = useState("");
     const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
