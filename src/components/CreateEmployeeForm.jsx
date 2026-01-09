@@ -8,6 +8,7 @@ import "@andoniaina/react-modal/Modal.css";
 import DatePickerInput from "./DatePickerInput";
 import SelectInput from "./SelectInput";
 import { states } from "../data/states";
+import { useEmployees } from "../context/EmployeeContext";
 
 // Options de départements
 const departments = [
@@ -26,7 +27,7 @@ const stateOptions = states.map((state) => ({
 
 // formulaire de création d'employé
 export default function CreateEmployeeForm() {
-    const [employees, setEmployees] = useState([]);
+    const { addEmployee } = useEmployees();
     const [isOpen, setIsOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [modalType, setModalType] = useState("success");
@@ -55,20 +56,17 @@ export default function CreateEmployeeForm() {
 
     // validation et soumission du formulaire
     const onSubmit = (data) => {
-        try {
-            const employee = {
-                ...data,
-                dateOfBirth: data.dateOfBirth?.toISOString(),
-                startDate: data.startDate?.toISOString(),
-            };
-            setEmployees([...employees, employee]);
-            setModalMessage("L’employé a été ajouté avec succès !");
-            setModalType("success");
-            reset();
-        } catch (err) {
-            setModalMessage("Une erreur est survenue.");
-            setModalType("error");
-        }
+        const employee = {
+            ...data,
+            dateOfBirth: data.dateOfBirth?.toISOString(),
+            startDate: data.startDate?.toISOString(),
+        };
+
+        addEmployee(employee);
+
+        setModalMessage("L’employé a été ajouté avec succès !");
+        setModalType("success");
+        reset();
         setIsOpen(true);
     };
 

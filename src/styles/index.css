@@ -43,16 +43,17 @@ body {
   font-size: 15px;
   cursor: pointer;
   transition: border-color 0.30s;
+  color: white;
 }
 .button_save:hover {
   background-color: #646cff;
-  color: white;
 }
 
 .title, 
 .title_create_employee {
   text-align: center;
   margin-bottom: 20px;
+  color: #6d73eb;
 }
 
 .form-section {
@@ -104,7 +105,7 @@ body {
 }
 
 .lien_tableau:hover {
-  color: #ba53f2;
+  color: #646cff;
 }
 
 /* THEMES */
