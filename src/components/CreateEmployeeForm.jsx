@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { employeeSchema } from "../schemas/employeeSchema";
 import { Modal } from "@andoniaina/react-modal";
 import "@andoniaina/react-modal/Modal.css";
-import useLocalStorage from "../hooks/useLocalStorage";
 import DatePickerInput from "./DatePickerInput";
 import SelectInput from "./SelectInput";
 import { states } from "../data/states";
@@ -27,7 +26,7 @@ const stateOptions = states.map((state) => ({
 
 // formulaire de création d'employé
 export default function CreateEmployeeForm() {
-    const [employees, setEmployees] = useLocalStorage("employees", []);
+    const [employees, setEmployees] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [modalType, setModalType] = useState("success");

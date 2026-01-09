@@ -1,15 +1,14 @@
-import { createContext, useContext } from "react";
-import useLocalStorage from "../hooks/useLocalStorage";
+import { createContext, useContext, useState } from "react";
 
-// fonction ThemeContext pour gérer le thème clair/sombre
+// création du contexte
 const ThemeContext = createContext();
 
-// fonction ThemeProvider pour fournir le contexte du thème
+// provider du thème
 export function ThemeProvider({ children }) {
-    const [theme, setTheme] = useLocalStorage("theme", "light");
+    const [theme, setTheme] = useState("light"); // 🔥 uniquement en mémoire
 
     const toggleTheme = () => {
-        setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+        setTheme(prev => (prev === "light" ? "dark" : "light"));
     };
 
     return (
@@ -21,7 +20,7 @@ export function ThemeProvider({ children }) {
     );
 }
 
-// fonction useTheme pour consommer le contexte du thème
+// hook personnalisé
 export function useTheme() {
     const context = useContext(ThemeContext);
 
