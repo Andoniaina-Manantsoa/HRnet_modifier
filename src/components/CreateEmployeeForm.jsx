@@ -120,13 +120,13 @@ export default function CreateEmployeeForm() {
 
                     <div className="form-group">
                         <label htmlFor="street">Street</label>
-                        <input {...register("street")} className="form-input" />
+                        <input {...register("street")} className="form-input" id="street" />
                         {errors.street && <p className="error">{errors.street.message}</p>}
                     </div>
 
                     <div className="form-group">
                         <label htmlFor="city">City</label>
-                        <input {...register("city")} className="form-input" />
+                        <input {...register("city")} className="form-input" id="city" />
                         {errors.city && <p className="error">{errors.city.message}</p>}
                     </div>
 
@@ -143,7 +143,7 @@ export default function CreateEmployeeForm() {
 
                     <div className="form-group">
                         <label htmlFor="zipCode">Zip Code</label>
-                        <input {...register("zipCode")} className="form-input" />
+                        <input {...register("zipCode")} className="form-input" id="zipCode"/>
                         {errors.zipCode && <p className="error">{errors.zipCode.message}</p>}
                     </div>
                 </fieldset>
