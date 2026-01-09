@@ -38,6 +38,7 @@ body {
   width: 100px;
   border-radius: 8px;
   border: 1px solid transparent;
+  background-color: #8e92e7;
   padding: 0.6em 1.2em;
   font-size: 15px;
   cursor: pointer;
@@ -48,14 +49,15 @@ body {
   color: white;
 }
 
-.title {
+.title, 
+.title_create_employee {
   text-align: center;
   margin-bottom: 20px;
 }
 
-.title_create_employee {
-  text-align: center;
-  margin-bottom: 20px;
+.form-section {
+  display: flex;
+  gap: 70px;
 }
 
 .employee-form {
@@ -85,15 +87,22 @@ body {
 .form-input{
   padding: 0.5rem;
   border: 1px solid #ccc;
+  background-color: #faf8f8;
   border-radius: 4px;
   font-size: 1rem;
   width: 250px;
 }
 
-.lien_tableau {
-  display: flex;
-  justify-content: center;
+.header-actions {
+  margin-bottom: 20px;
 }
+
+.lien_tableau {
+  font-size: 1.2rem;
+  color: #8e92e7;
+  text-decoration: none;
+}
+
 .lien_tableau:hover {
   color: #ba53f2;
 }
@@ -118,21 +127,17 @@ body {
 
 /* HEADER */
 .app-header {
-  padding: 20px;
+  padding-top: 100px;
+  margin-bottom: 50px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.header-actions {
-  display: flex;
   justify-content: center;
-  gap: 15px;
+  align-items: center;
 }
 
 /* BUTTON */
 .theme-toggle {
-  padding: 6px 12px;
+  padding: 5px 15px;
   border-radius: 4px;
   border: none;
   cursor: pointer;
@@ -146,9 +151,4 @@ body {
 .theme-light .theme-toggle {
   background-color: #eee;
   color: black;
-}
-
-.app-container {
-display: flex;
-justify-content: center;
 }

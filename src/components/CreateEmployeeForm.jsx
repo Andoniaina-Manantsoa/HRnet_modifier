@@ -76,87 +76,85 @@ export default function CreateEmployeeForm() {
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className="employee-form">
-                <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor="firstName">First Name</label>
-                        <input id="firstName" {...register("firstName")} className="form-input" />
-                        {errors.firstName && <p className="error">{errors.firstName.message}</p>}
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="lastName">Last Name</label>
-                        <input id="lastName" {...register("lastName")} className="form-input" />
-                        {errors.lastName && <p className="error">{errors.lastName.message}</p>}
-                    </div>
-                </div>
+                <div className="form-section">
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="firstName">First Name</label>
+                            <input id="firstName" {...register("firstName")} className="form-input" />
+                            {errors.firstName && <p className="error">{errors.firstName.message}</p>}
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="lastName">Last Name</label>
+                            <input id="lastName" {...register("lastName")} className="form-input" />
+                            {errors.lastName && <p className="error">{errors.lastName.message}</p>}
+                        </div>
 
-                <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor="dateOfBirth">Date of Birth</label>
+                        <div className="form-group">
+                            <label htmlFor="dateOfBirth">Date of Birth</label>
+                            <Controller
+                                control={control}
+                                name="dateOfBirth"
+                                render={({ field }) => (
+                                    <DatePickerInput id="dateOfBirth" selectedDate={field.value} onChange={field.onChange} />
+                                )}
+                            />
+                            {errors.dateOfBirth && <p className="error">{errors.dateOfBirth.message}</p>}
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="startDate">Start Date</label>
+                            <Controller
+                                control={control}
+                                name="startDate"
+                                render={({ field }) => (
+                                    <DatePickerInput id="startDate" selectedDate={field.value} onChange={field.onChange} />
+                                )}
+                            />
+                            {errors.startDate && <p className="error">{errors.startDate.message}</p>}
+                        </div>
+
+                        <label htmlFor="department">Department</label>
                         <Controller
+                            id="department"
                             control={control}
-                            name="dateOfBirth"
-                            render={({ field }) => (
-                                <DatePickerInput id="dateOfBirth" selectedDate={field.value} onChange={field.onChange} />
-                            )}
+                            name="department"
+                            render={({ field }) => <SelectInput {...field} options={departments} />}
                         />
-                        {errors.dateOfBirth && <p className="error">{errors.dateOfBirth.message}</p>}
+                        {errors.department && <p className="error">{errors.department.message}</p>}
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="startDate">Start Date</label>
-                        <Controller
-                            control={control}
-                            name="startDate"
-                            render={({ field }) => (
-                                <DatePickerInput id="startDate" selectedDate={field.value} onChange={field.onChange}/>
-                            )}
-                        />
-                        {errors.startDate && <p className="error">{errors.startDate.message}</p>}
-                    </div>
-                </div>
+                    <fieldset className="adress">
+                        <legend>Address</legend>
 
-                <fieldset className="adress">
-                    <legend>Address</legend>
+                        <div className="form-group">
+                            <label htmlFor="street">Street</label>
+                            <input {...register("street")} className="form-input" id="street" />
+                            {errors.street && <p className="error">{errors.street.message}</p>}
+                        </div>
 
-                    <div className="form-group">
-                        <label htmlFor="street">Street</label>
-                        <input {...register("street")} className="form-input" id="street" />
-                        {errors.street && <p className="error">{errors.street.message}</p>}
-                    </div>
+                        <div className="form-group">
+                            <label htmlFor="city">City</label>
+                            <input {...register("city")} className="form-input" id="city" />
+                            {errors.city && <p className="error">{errors.city.message}</p>}
+                        </div>
 
-                    <div className="form-group">
-                        <label htmlFor="city">City</label>
-                        <input {...register("city")} className="form-input" id="city" />
-                        {errors.city && <p className="error">{errors.city.message}</p>}
-                    </div>
+                        <div className="form-group">
+                            <label htmlFor="state">State</label>
+                            <Controller
+                                id="state"
+                                control={control}
+                                name="state"
+                                render={({ field }) => <SelectInput {...field} options={stateOptions} />}
+                            />
+                            {errors.state && <p className="error">{errors.state.message}</p>}
+                        </div>
 
-                    <div className="form-group">
-                        <label htmlFor="state">State</label>
-                        <Controller
-                            id="state"
-                            control={control}
-                            name="state"
-                            render={({ field }) => <SelectInput {...field} options={stateOptions} />}
-                        />
-                        {errors.state && <p className="error">{errors.state.message}</p>}
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="zipCode">Zip Code</label>
-                        <input {...register("zipCode")} className="form-input" id="zipCode"/>
-                        {errors.zipCode && <p className="error">{errors.zipCode.message}</p>}
-                    </div>
-                </fieldset>
-
-                <div className="form-group">
-                    <label htmlFor="department">Department</label>
-                    <Controller
-                        id="department"
-                        control={control}
-                        name="department"
-                        render={({ field }) => <SelectInput {...field} options={departments}/>}
-                    />
-                    {errors.department && <p className="error">{errors.department.message}</p>}
+                        <div className="form-group">
+                            <label htmlFor="zipCode">Zip Code</label>
+                            <input {...register("zipCode")} className="form-input" id="zipCode" />
+                            {errors.zipCode && <p className="error">{errors.zipCode.message}</p>}
+                        </div>
+                    </fieldset>
                 </div>
 
                 <div className="save-button-container">

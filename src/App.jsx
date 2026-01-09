@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import CreateEmployee from "./pages/CreatEmployee.jsx";
+import CreateEmployee from "./pages/CreateEmployee.jsx";
 import EmployeeList from "./pages/EmployeeList.jsx";
 import { useTheme } from "./context/ThemeContext.jsx";
 
@@ -12,18 +12,18 @@ function App() {
         <header className="app-header">
           <h1 className="title">HRnet</h1>
 
-          <div className="header-actions">
-            <Link to="/employees" className="lien_tableau">
-              View Current Employees
-            </Link>
-          </div>
-        </header>
+            <div className="header-actions">
+              <Link to="/employees" className="lien_tableau">
+                View Current Employees
+              </Link>
+            </div>
 
-        <div className="app-container">
-          <button onClick={toggleTheme} className="theme-toggle">
-            {theme === "light" ? "🌙 Dark mode" : "☀️ Light mode"}
-          </button>
-        </div>
+            <div className="app-container">
+              <button onClick={toggleTheme} className="theme-toggle">
+                {theme === "light" ? "🌙 Dark mode" : "☀️ Light mode"}
+              </button>
+            </div>
+        </header>
 
         <Routes>
           <Route path="/" element={<CreateEmployee />} />
