@@ -1,5 +1,18 @@
 import React, { useState, useMemo } from "react";
 
+// configuration des colonnes (label affiché + clé réelle)
+const columns = [
+    { label: "First Name", key: "firstName" },
+    { label: "Last Name", key: "lastName" },
+    { label: "Start Date", key: "startDate" },
+    { label: "Department", key: "department" },
+    { label: "Date of Birth", key: "dateOfBirth" },
+    { label: "Street", key: "street" },
+    { label: "City", key: "city" },
+    { label: "State", key: "state" },
+    { label: "Zip Code", key: "zipCode" },
+];
+
 // fonction EmployeeTable pour afficher les employés dans un tableau avec recherche, tri et pagination
 export default function EmployeeTable({ employees }) {
     const [search, setSearch] = useState("");
@@ -20,26 +33,54 @@ export default function EmployeeTable({ employees }) {
     // Tri
     const sortedEmployees = useMemo(() => {
         if (!sortConfig.key) return filteredEmployees;
+
         return [...filteredEmployees].sort((a, b) => {
-            if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === "asc" ? -1 : 1;
-            if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === "asc" ? 1 : -1;
+            let aValue = a[sortConfig.key];
+            let bValue = b[sortConfig.key];
+
+            // gestion des dates
+            if (sortConfig.key === "startDate" || sortConfig.key === "dateOfBirth") {
+                aValue = new Date(aValue);
+                bValue = new Date(bValue);
+            }
+
+            if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+            if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
             return 0;
         });
     }, [filteredEmployees, sortConfig]);
 
     // Pagination
+    // calcul du nombre total de pages
     const totalPages = Math.ceil(sortedEmployees.length / rowsPerPage);
+
+    // mise à jour des employés affichés en fonction de la page courante et du nombre de lignes par page
     const currentEmployees = useMemo(() => {
         const start = (currentPage - 1) * rowsPerPage;
         return sortedEmployees.slice(start, start + rowsPerPage);
     }, [sortedEmployees, currentPage, rowsPerPage]);
 
+    // Gestion du clic sur l'entête pour trier
     const requestSort = (key) => {
         let direction = "asc";
         if (sortConfig.key === key && sortConfig.direction === "asc") {
             direction = "desc";
         }
         setSortConfig({ key, direction });
+    };
+
+    // Gestion du clavier pour le tri
+    const handleKeyDown = (event, key) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            requestSort(key);
+        }
+    };
+
+    // Détermination de l'état aria-sort pour l'accessibilité
+    const getAriaSort = (key) => {
+        if (sortConfig.key !== key) return "none";
+        return sortConfig.direction === "asc" ? "ascending" : "descending";
     };
 
     return (
@@ -70,21 +111,36 @@ export default function EmployeeTable({ employees }) {
                 ))}
             </select>
 
+            {/* Tableau */}
             <table className="employee-table">
                 <thead>
                     <tr>
-                        {["First Name", "Last Name", "Start Date", "Department", "Date of Birth", "Street", "City", "State", "Zip Code"].map((key) => (
+                        {columns.map(({ label, key }) => (
                             <th
                                 key={key}
+                                role="columnheader"
+                                tabIndex={0}
+                                aria-sort={getAriaSort(key)}
                                 onClick={() => requestSort(key)}
+                                onKeyDown={(e) => handleKeyDown(e, key)}
                                 className="sortable"
                             >
-                                {key}
-                                {sortConfig.key === key}
+                                <span className="th-content">
+                                    <span className="th-label">{label}</span>
+
+                                    <span className="sort-icon">
+                                        {sortConfig.key === key
+                                            ? sortConfig.direction === "asc"
+                                                ? "▲"
+                                                : "▼"
+                                            : "⇅"}
+                                    </span>
+                                </span>
                             </th>
                         ))}
                     </tr>
                 </thead>
+
                 <tbody>
                     {currentEmployees.map((emp, index) => (
                         <tr key={index} className="border-b">
