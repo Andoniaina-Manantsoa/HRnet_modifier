@@ -1,4 +1,4 @@
-// fonction SelectInput pour créer un menu déroulant
+// fonction SelectInput pour créer un menu déroulant dans un formulaire 
 function SelectInput({ label, id, value, onChange, options }) {
     return (
         <div className="form-group">

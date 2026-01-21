@@ -7,6 +7,7 @@ const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
     const [theme, setTheme] = useState("light"); // 🔥 uniquement en mémoire
 
+    //Inversion du thème, utilisable partout dans l'application
     const toggleTheme = () => {
         setTheme(prev => (prev === "light" ? "dark" : "light"));
     };
@@ -21,6 +22,7 @@ export function ThemeProvider({ children }) {
 }
 
 // hook personnalisé
+//Simplifie l'accès au contexte, sécurisé avec une erreur si mal utilisé
 export function useTheme() {
     const context = useContext(ThemeContext);
 

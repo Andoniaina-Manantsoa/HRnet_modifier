@@ -1,6 +1,9 @@
 import React, { useState, useMemo } from "react";
 
-// configuration des colonnes (label affiché + clé réelle)
+/**
+ * Configuration des colonnes du tableau des employés
+ * @type {Array<{label: string, key: string}>}
+ */
 const columns = [
     { label: "First Name", key: "firstName" },
     { label: "Last Name", key: "lastName" },
@@ -15,35 +18,45 @@ const columns = [
 
 // fonction EmployeeTable pour afficher les employés dans un tableau avec recherche, tri et pagination
 export default function EmployeeTable({ employees }) {
-    const [search, setSearch] = useState("");
-    const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+    const [search, setSearch] = useState(""); //Texte de recherche
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" }); //Gestion du tri
+    
+    //Gestion de la pagination (page courante et nombre de lignes par page affichées)
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    // Filtrage par recherche
+    /**
+     * Filtre les employés en fonction du texte de recherche
+     * @type {Array<Object>}
+     */
     const filteredEmployees = useMemo(() => {
         return employees.filter(emp =>
-            Object.values(emp)
-                .join(" ")
-                .toLowerCase()
-                .includes(search.toLowerCase())
+            Object.values(emp) // récupère toutes les valeurs des propriétés de l'objet employé
+                .join(" ") //transforme les valeurs en une seule chaîne de caractères
+                .toLowerCase() // recherche insensible à la casse
+                .includes(search.toLowerCase()) //filtre selon le texte de recherche
         );
     }, [employees, search]);
 
-    // Tri
+    /**
+     * Trie les employés filtrés en fonction de la configuration de tri
+     * @type {Array<Object>}
+     */
     const sortedEmployees = useMemo(() => {
-        if (!sortConfig.key) return filteredEmployees;
+        if (!sortConfig.key) return filteredEmployees; //si aucune clé de tri n'est définie, retourne les employés filtrés sans tri
 
+        //Copie du tableau pour éviter de muter l'original
         return [...filteredEmployees].sort((a, b) => {
             let aValue = a[sortConfig.key];
             let bValue = b[sortConfig.key];
 
-            // gestion des dates
+            // Les dates doivent être comparées en tant qu'objets Date
             if (sortConfig.key === "startDate" || sortConfig.key === "dateOfBirth") {
                 aValue = new Date(aValue);
                 bValue = new Date(bValue);
             }
 
+            //Logique de tri, le résultat dépend de la direction (ascendante ou descendante)
             if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
             if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
             return 0;
@@ -51,7 +64,10 @@ export default function EmployeeTable({ employees }) {
     }, [filteredEmployees, sortConfig]);
 
     // Pagination
-    // calcul du nombre total de pages
+    /**
+     * Calcul du nombre total de pages
+     * @type {number}
+     */
     const totalPages = Math.ceil(sortedEmployees.length / rowsPerPage);
 
     // mise à jour des employés affichés en fonction de la page courante et du nombre de lignes par page
@@ -69,7 +85,7 @@ export default function EmployeeTable({ employees }) {
         setSortConfig({ key, direction });
     };
 
-    // Gestion du clavier pour le tri
+    // Gestion du clavier pour le tri Entrer, Espace
     const handleKeyDown = (event, key) => {
         if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
@@ -77,7 +93,8 @@ export default function EmployeeTable({ employees }) {
         }
     };
 
-    // Détermination de l'état aria-sort pour l'accessibilité
+    // Détermination de l'état aria-sort pour l'accessibilité 
+    // Indique si une colonne est triée et dans quelle direction
     const getAriaSort = (key) => {
         if (sortConfig.key !== key) return "none";
         return sortConfig.direction === "asc" ? "ascending" : "descending";
@@ -85,7 +102,7 @@ export default function EmployeeTable({ employees }) {
 
     return (
         <div>
-            {/* Recherche */}
+            {/* Recherche, filtrage en temps réel*/}
             <input
                 type="text"
                 placeholder="Search..."

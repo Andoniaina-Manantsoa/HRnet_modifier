@@ -19,7 +19,7 @@ const departments = [
     { value: "Legal", label: "Legal" },
 ];
 
-// Options d'états
+// Options d'états / Transformation des données brutes en format exploitable par SelectInput
 const stateOptions = states.map((state) => ({
     value: state.name,
     label: state.name,
@@ -27,20 +27,39 @@ const stateOptions = states.map((state) => ({
 
 // formulaire de création d'employé
 export default function CreateEmployeeForm() {
+    /**
+     * Récupère la fonction addEmployee depuis le contexte des employés.
+     * Permet d’ajouter un employé dans toute l’application via le contexte.
+     * @returns {Object} - Les fonctions et données du contexte des employés
+     * @description Utilise le contexte des employés pour ajouter un nouvel employé.
+     */
     const { addEmployee } = useEmployees();
+
+    /**
+     * Gestion de l'état du modal.
+     * isOpen : indique si le modal est ouvert ou fermé.
+     * modalMessage : message à afficher dans le modal.
+     * modalType : type du modal (succès ou erreur).
+     */
     const [isOpen, setIsOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [modalType, setModalType] = useState("success");
 
     // validation du formulaire avec react-hook-form et zod
+    /**
+     * Initialisation de useForm avec zodResolver pour la validation.
+     * Définit les valeurs par défaut pour chaque champ du formulaire.
+     * @returns {Object} - Les méthodes et états de gestion du formulaire
+     * @description Utilise react-hook-form avec zod pour gérer et valider le formulaire de création d'employé.
+     */
     const {
-        register,
+        register, //Connecte les inputs HTML au gestionnaire de formulaire.
         handleSubmit,
-        control,
-        reset,
+        control, //nécessaire pour les composants contrôlés comme DatePickerInput et SelectInput.
+        reset, // réinitialise le formulaire après la soumission.
         formState: { errors },
     } = useForm({
-        resolver: zodResolver(employeeSchema),
+        resolver: zodResolver(employeeSchema),// Régle de validation avec zod
         defaultValues: {
             firstName: "",
             lastName: "",
@@ -56,12 +75,20 @@ export default function CreateEmployeeForm() {
 
     // validation et soumission du formulaire
     const onSubmit = (data) => {
+        /**
+         * Prépare les données de l'employé avant de les ajouter.
+         * Convertit les dates en chaînes ISO.
+         * Appelle la fonction addEmployee pour ajouter l'employé.
+         * Affiche un modal de succès et réinitialise le formulaire.
+         * @param {Object} data - Données du formulaire validées
+         */
         const employee = {
             ...data,
             dateOfBirth: data.dateOfBirth?.toISOString(),
             startDate: data.startDate?.toISOString(),
         };
 
+        // pour mettre à jour le contexte des employés
         addEmployee(employee);
 
         setModalMessage("L’employé a été ajouté avec succès !");
