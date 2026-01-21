@@ -24,7 +24,7 @@
 }
 
 .employee-table thead {
-    background-color: #f4f4f4;
+    background-color: #b1cbd8;
 }
 
 .sortable {
@@ -34,7 +34,7 @@
 }
 
 .sortable:hover {
-    background-color: #eaeaea;
+    background-color: #b9bbbd;
 }
 
 .sortable:focus {
@@ -71,7 +71,7 @@
 }
 
 .employee-table tbody tr:hover {
-    background-color: #f9fafb;
+    background-color: #c6c9cb;
 }
 
 .pagination {
